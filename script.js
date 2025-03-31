@@ -1,9 +1,8 @@
-//your JS code here. If required.
 document.addEventListener("DOMContentLoaded", function () {
-  // Create and append the form elements dynamically
+  // DOM elements
   const body = document.body;
 
-  // Create form
+  // Create and append the form elements dynamically
   const form = document.createElement("form");
 
   // Heading
@@ -57,12 +56,21 @@ document.addEventListener("DOMContentLoaded", function () {
   body.appendChild(existingUserBtn);
 
   // Check if credentials exist in localStorage
-  const savedUsername = localStorage.getItem("username");
-  const savedPassword = localStorage.getItem("password");
+  function checkStoredCredentials() {
+    const savedUsername = localStorage.getItem("username");
+    const savedPassword = localStorage.getItem("password");
 
-  if (savedUsername && savedPassword) {
-    existingUserBtn.style.display = "block"; // Show "Login as existing user"
+    if (savedUsername && savedPassword) {
+      existingUserBtn.style.display = "block"; // Show button
+      existingUserBtn.addEventListener("click", function () {
+        alert(`Logged in as ${savedUsername}`);
+      });
+    } else {
+      existingUserBtn.style.display = "none"; // Hide button if no stored credentials
+    }
   }
+
+  checkStoredCredentials(); // Check on page load
 
   // Form submit event listener
   form.addEventListener("submit", function (event) {
@@ -82,17 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (rememberMe) {
       localStorage.setItem("username", username);
       localStorage.setItem("password", password);
-      existingUserBtn.style.display = "block"; // Show "Login as existing user"
     } else {
       localStorage.removeItem("username");
       localStorage.removeItem("password");
-      existingUserBtn.style.display = "none"; // Hide "Login as existing user"
     }
-  });
 
-  // Existing user login event listener
-  existingUserBtn.addEventListener("click", function () {
-    alert(`Logged in as ${savedUsername}`);
+    checkStoredCredentials(); // Update visibility of "Login as existing user"
   });
 });
-
